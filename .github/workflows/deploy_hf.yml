@@ -14,21 +14,21 @@ jobs:
         with:
           lfs: true
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.12'
-
       - name: Deploy to Hugging Face
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
+          # Cloner l'espace
           git clone https://lepiso:$HF_TOKEN@huggingface.co/spaces/lepiso/cifar10-MLops
           cd cifar10-MLops
-          cp -r ../streamlit_app .
-          cp ../model.h5 .
-          cp ../params.yaml .
-          cp ../requirements-streamlit.txt requirements.txt
+          
+          # Copier les fichiers
+          cp -r ../streamlit_app . 2>/dev/null || echo "streamlit_app not found"
+          cp ../model.h5 . 2>/dev/null || echo "model.h5 not found"
+          cp ../params.yaml . 2>/dev/null || echo "params.yaml not found"
+          cp ../requirements-streamlit.txt requirements.txt 2>/dev/null || cp ../requirements.txt requirements.txt
+          
+          # Créer Dockerfile
           cat > Dockerfile << 'DOCKEREOF'
           FROM python:3.12-slim
 
@@ -37,11 +37,11 @@ jobs:
 
           WORKDIR /app
 
-            RUN apt-get update && apt-get install -y \
-              libgl1 \
-              libglib2.0-0 \
-              curl \
-              && rm -rf /var/lib/apt/lists/*
+          RUN apt-get update && apt-get install -y \
+            libgl1 \
+            libglib2.0-0 \
+            curl \
+            && rm -rf /var/lib/apt/lists/*
 
           COPY requirements.txt .
           RUN pip install --no-cache-dir -r requirements.txt
@@ -54,7 +54,9 @@ jobs:
 
           CMD ["streamlit", "run", "streamlit_app/app.py", "--server.port=7860", "--server.address=0.0.0.0"]
           DOCKEREOF
-                cat > README.md << 'README'
+          
+          # Créer README
+          cat > README.md << 'README'
           ---
           title: CIFAR-10 Image Classifier
           emoji: 🖼️
@@ -65,7 +67,9 @@ jobs:
           ---
 
           # 🖼️ CIFAR-10 Image Classifier
-            README
+          README
+          
+          # Pousser
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
           git add .
