@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+.git/
+.gitignore
+.env
+venv/
+env/
+data/
+logs/
+reports/
+tests/
+*.pkl
+*.ipynb
+README.md
+.github/
+.streamlit/
+streamlit_app/

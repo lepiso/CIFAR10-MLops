@@ -1,0 +1,14 @@
+train: 
+  epochs: 20
+  batch_size: 64
+  learning_rate: 0.001
+  optimizer: adam
+  val_split: 0.1
+model:
+  conv_channels: [32,64,128]
+  dropout: 0.3
+  num_classes: 10
+data:
+  image_size: 32
+  normalize_mean: [0.4914, 0.4822, 0.4465]
+  normalize_std: [0.2023, 0.1994, 0.2010]

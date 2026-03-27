@@ -1,0 +1,12 @@
+streamlit>=1.29.0
+plotly>=5.18.0
+pandas>=2.2.0
+numpy>=1.26.0
+Pillow>=10.1.0
+tensorflow>=2.15.0
+pyyaml>=6.0.1
+python-multipart>=0.0.9
+shap>=0.44.0
+lime>=0.2.0
+captum>=0.7.0
+matplotlib>=3.7.0

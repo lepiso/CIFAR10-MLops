@@ -1,0 +1,20 @@
+stages:
+  train:
+    cmd: python src/train.py
+    deps: 
+      - src/train.py
+      - app/model.py
+      - data/raw
+      - params.yaml
+    params:
+      - train
+      - model
+    outs:
+      - model.h5
+  evaluate: 
+    cmd: python/src/evaluate.py --threshold 0.80
+    deps: 
+      - src/evaluate.py
+      - app/model.py
+      - model.h5
+      - data/raw

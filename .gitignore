@@ -1,0 +1,69 @@
+```gitignore
+# .gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# MLflow
+mlruns/
+mlflow.db
+
+# DVC
+.dvc/
+.dvcignore
+.cache/
+
+# Modèles
+*.h5
+*.pkl
+*.keras
+model_savedmodel/
+models/
+
+# Data
+data/raw/
+data/processed/
+*.csv
+*.jsonl
+
+# Logs
+logs/
+*.log
+
+# Reports
+reports/figures/
+reports/metrics/
+*.html
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Tests
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Docker
+*.tardeploy_hf/

@@ -1,0 +1,43 @@
+name: Model Monitoring
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Tous les jours à minuit
+  workflow_dispatch:  # Manuel
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+    
+    - name: Run drift detection
+      run: |
+        python monitoring/data_drift.py
+    
+    - name: Check drift and trigger retraining
+      if: success()
+      run: |
+        # Vérifier si drift détecté dans le rapport
+        if grep -q "ALERTE : Data drift detecte" reports/monitoring/drift_report_*.html; then
+          echo "⚠️ Drift detected! Triggering retraining..."
+          # Déclencher le workflow de retraining
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/${{ github.repository }}/actions/workflows/retrain.yml/dispatches \
+            -d '{"ref":"main"}'
+        else
+          echo "✅ No drift detected"
+        fi
