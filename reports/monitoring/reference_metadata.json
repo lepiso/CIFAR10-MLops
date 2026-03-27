@@ -1,0 +1,17 @@
+{
+  "created_at": "2026-03-27T12:48:46.490287",
+  "num_samples": 17,
+  "confidence_mean": 0.8028470588235295,
+  "confidence_std": 0.22431062479753122,
+  "class_distribution": {
+    "airplane": 3,
+    "cat": 3,
+    "deer": 3,
+    "dog": 2,
+    "bird": 2,
+    "truck": 1,
+    "horse": 1,
+    "ship": 1,
+    "frog": 1
+  }
+}
