@@ -67,3 +67,4 @@ htmlcov/
 
 # Docker
 *.tardeploy_hf/
+deploy_hf/
