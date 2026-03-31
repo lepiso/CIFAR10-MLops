@@ -18,29 +18,41 @@ try:
 except ImportError as e:
     print(f"⚠️ Erreur d'import SimpleCNN: {e}")
     #Classe SimpleCNN
-    class SimpleCNN(tf.keras.Model):
-        def __init__(self, num_classes=10, dropout=0.3, **kwargs):
-            super().__init__(**kwargs)
-            self.num_classes = num_classes
-            self.dropout = dropout
-            self.features = tf.keras.Sequential([
-                tf.keras.layers.Conv2D(32, 3, padding='same', activation='relu'),
-                tf.keras.layers.MaxPool2D(2),
-                tf.keras.layers.Conv2D(64, 3, padding='same', activation='relu'),
-                tf.keras.layers.MaxPool2D(2),
-                tf.keras.layers.Conv2D(128, 3, padding='same', activation='relu'),
-                tf.keras.layers.MaxPool2D(2),
-            ])
-            self.classifier = tf.keras.Sequential([
-                tf.keras.layers.Flatten(),
-                tf.keras.layers.Dense(256, activation='relu'),
-                tf.keras.layers.Dropout(dropout),
-                tf.keras.layers.Dense(num_classes)
-            ])
+class SimpleCNN(tf.keras.Model):
+    def __init__(self, num_classes=10, dropout=0.3, **kwargs):
+        super().__init__(**kwargs)
+        self.num_classes = num_classes
+        self.dropout = dropout
         
-        def call(self, x, training=False):
-            x = self.features(x, training=training)
-            return self.classifier(x, training=training)
+        # Feature extractor AVEC BatchNormalization
+        self.features = tf.keras.Sequential([
+            tf.keras.layers.Conv2D(32, kernel_size=3, padding='same', activation=None),
+            tf.keras.layers.BatchNormalization(),
+            tf.keras.layers.ReLU(),
+            tf.keras.layers.MaxPool2D(pool_size=2, strides=2),
+            
+            tf.keras.layers.Conv2D(64, kernel_size=3, padding='same', activation=None),
+            tf.keras.layers.BatchNormalization(),
+            tf.keras.layers.ReLU(),
+            tf.keras.layers.MaxPool2D(pool_size=2, strides=2),
+            
+            tf.keras.layers.Conv2D(128, kernel_size=3, padding='same', activation=None),
+            tf.keras.layers.BatchNormalization(),
+            tf.keras.layers.ReLU(),
+            tf.keras.layers.MaxPool2D(pool_size=2, strides=2),
+        ], name='features')
+        
+        # Classifier
+        self.classifier = tf.keras.Sequential([
+            tf.keras.layers.Flatten(),
+            tf.keras.layers.Dense(256, activation='relu'),
+            tf.keras.layers.Dropout(dropout),
+            tf.keras.layers.Dense(num_classes)
+        ], name='classifier')
+    
+    def call(self, x, training=False):
+        x = self.features(x, training=training)
+        return self.classifier(x, training=training)
 
 # Constantes
 CLASSES = ['airplane', 'automobile', 'bird', 'cat', 'deer',
