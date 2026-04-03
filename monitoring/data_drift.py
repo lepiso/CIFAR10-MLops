@@ -4,8 +4,8 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 from datetime import datetime
-from evidently.report import Report
-from evidently.metric_preset import DataDriftPreset
+from evidently import Report
+from evidently.metrics import DataDriftTable
 from evidently.metrics import ColumnDriftMetric
 
 class ModelMonitor:
@@ -59,7 +59,7 @@ class ModelMonitor:
         ref_df = pd.read_csv(self.reference_path)
         
         report = Report(metrics=[
-            DataDriftPreset(),
+            DataDriftTable(),
             ColumnDriftMetric(column_name='confidence')
         ])
         
