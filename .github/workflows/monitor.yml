@@ -21,7 +21,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install pandas numpy evidently
+          pip install pandas numpy "evidently==0.4.33"
 
       - name: Run drift detection
         run: |
